@@ -1,0 +1,22 @@
+name: build and push docker image for Postgres
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v3
+
+      - name: login to GHCR
+        run: echo "${{ secrets.GH_PAT }}" | docker login ghrc.io -u ryanamorrison
+
+      - name: build and push Docker image
+        run: |
+          docker build . --tag ghrc.io/ryanamorrison/postgres-image:latest
+          docker push ghrc.io/ryanamorrison/postgres-image:latest
