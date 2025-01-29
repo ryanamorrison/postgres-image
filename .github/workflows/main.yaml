@@ -33,14 +33,14 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: ${{ env.REG }}/${{ env.NAME }}
-        tags: |
-          # set latest tag for default branch
-          type=raw,value=latest,enable={{is_default_branch}}
+
 
       - name: build and push Docker image
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
-          tags: ${{ steps.labels.outputs.tags }}
+          tags: |
+            # set latest tag for default branch
+            type=raw,value=latest,enable={{is_default_branch}}
           labels: ${{ steps.labels.outputs.labels }}
