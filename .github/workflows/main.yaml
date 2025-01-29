@@ -30,16 +30,17 @@ jobs:
 
       - name: create tags and labels for Docker
         id: labels
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: ${{ env.REG }}/${{ env.NAME }}
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
 
 
       - name: build and push Docker image
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: true
-          tags: |
-            type=raw,value=latest,enable={{is_default_branch}}
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.labels.outputs.labels }}
